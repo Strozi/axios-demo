@@ -15,10 +15,13 @@ function performGetRequest1(){
 function performGetRequest2(){
   var resultElement = document.getElementById('getResult2');
   resultElement.innerHTML='';
+  var todoId = document.getElementById("todoID").value;
 
-  var id = document.getElementById("todoID");
-
-  axios.get('http://jsonplaceholder.typicode.com/todos' + '/' + id)
+  axios.get('http://jsonplaceholder.typicode.com/todos',{
+    params: {
+      id: todoId
+    }
+  })
     .then(function(response){
       resultElement.innerHTML = generateSuccessHTMLOutput(response);
 
@@ -27,6 +30,34 @@ function performGetRequest2(){
       resultElement.innerHTML = generateErrorHTMLOutput(error);
     })
 }
+
+document.getElementById('todoInputForm').addEventListener('submit', performPostRequest)
+function performPostRequest(e){
+  var resultElement = document.getElementById('postResult');
+  resultElement.innerHTML='';
+  var todoTitle = document.getElementById("todoTitle").value;
+
+  axios.post('http://jsonplaceholder.typicode.com/todos', {
+    userId : '1',
+    title: todoTitle,
+    completed: false
+  }).then(function(response){
+    resultElement.innerHTML = generateSuccessHTMLOutput(response);
+  }).catch(function(error){
+      resultElement.innerHTML = generateErrorHTMLOutput(error);
+  })
+  e.preventDefault();
+}
+
+function clearOutput(){
+  var resultElement = document.getElementById('getResult1');
+  resultElement.innerHTML='';
+  var resultElement = document.getElementById('getResult2');
+  resultElement.innerHTML='';
+  var resultElement = document.getElementById('postResult');
+  resultElement.innerHTML='';
+}
+
 
 function generateSuccessHTMLOutput(response){
     return '<h4>Result</h4>' + '<h5>Status</h5>' + '<pre>' + response.status +
